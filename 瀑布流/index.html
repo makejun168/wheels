@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>瀑布流</title>
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        #list-wrap {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #list-wrap > .masonry-item {
+            width: 300px;
+            padding: 5px;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            transform: scale(.5);
+            transition: opacity .5s,transform .5s,-webkit-transform .5s;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="list-wrap"></div>
+    </div>
+
+    <script type="text/javascript" src="data/data.js"></script>
+    <script>
+        let box = document.getElementById('list-wrap');
+
+        let htmlStr = '';
+        for (let i = 0; i < data.slice(1, 20).length; i++) {
+            htmlStr += `<div class="masonry-item">
+                <div class="card-wrap">
+                    <div class="card-container">
+                        <div class="card-preview-image">
+                            <img src="${data[i].media_url}" alt="thumb" class="thumb-image">
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        }
+        box.innerHTML = htmlStr;
+    </script>
+    <script>
+        let items = box.children;
+        let gap = 10;
+
+        window.onload = function () {
+            waterFall();
+            function waterFall() {
+                // 获取视口宽度
+                let pageWidth = window.innerWidth || document.documentElement;
+                let itemWidth = items[0].offsetWidth;
+
+                let columns = parseInt(pageWidth / (itemWidth + gap));
+
+                let arr = [];
+                for (let j = 0; j < items.length; j++) {
+                    if (j < columns) {
+                        items[j].style.top = '0px';
+                        items[j].style.left = (itemWidth + gap) * j + 'px';
+                        arr.push(items[j].offsetHeight);
+                    } else {
+                        let minHeight = arr[0]; // 最小值默认是最后一位
+                        let index = 0;
+
+                        for (let k = 0; k < arr.length; k++) {
+                            if (minHeight > arr[k]) {
+                                minHeight = arr[k];
+                                index = k;
+                            }
+                        }
+                        // 找到最小一项
+                        items[j].style.top = arr[index] + gap + 'px'; // 设置 top 值
+                        items[j].style.left = items[index].offsetLeft + 'px'; // 设置左边的值
+
+                        // 改变了 最小的列
+                        arr[index] = arr[index] + items[j].offsetHeight + gap;
+                    }
+                    items[j].style.opacity = 1;
+                    items[j].style.transform = 'scale(1)';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
