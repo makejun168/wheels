@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无限滚动加载</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            overflow: scroll;
+            justify-content: center;
+            align-content: center;
+        }
+        .img-wrapper {
+            width: 100%;
+        }
+        .img-wrapper > img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="img-wrapper">
+            <img src="./data/1.jpg" alt="">
+        </div>
+        <div class="img-wrapper">
+            <img src="./data/2.jpg" alt="">
+        </div>
+        <div class="img-wrapper">
+            <img src="./data/3.jpg" alt="">
+        </div>
+        <div class="img-wrapper">
+            <img src="./data/4.jpg" alt="">
+        </div>
+        <div class="img-wrapper">
+            <img src="./data/5.jpg" alt="">
+        </div>
+        <div class="img-wrapper">
+            <img src="./data/6.jpg" alt="">
+        </div>
+    </div>
+</body>
+
+<script>
+    // 函数节流 减少函数的执行次数
+    function throttling(fn, delay) {
+        return
+    }
+
+    let data = [
+        './data/1.jpg',
+        './data/2.jpg',
+        './data/3.jpg',
+        './data/4.jpg',
+        './data/5.jpg',
+        './data/6.jpg',
+    ];
+    let container = document.querySelectorAll('.container')[0];
+    let items = document.querySelectorAll('.img-wrapper');
+    // 判断最后的图片在用户的视野当中了
+    window.onscroll = function (e) {
+        // console.log(e)
+        console.log(window.innerHeight);
+        console.log(window.pageYOffset);
+        if (window.innerHeight + window.pageYOffset >= items[items.length - 1].offsetTop) {
+            console.log('end')
+            // 到达底部
+            for (let i = 0; i < data.length; i++) {
+                let div = document.createElement('div');
+                div.className = "img-wrapper";
+                div.innerHTML = `<img src="${data[i]}" alt="">`
+                container.appendChild(div);
+            }
+        }
+    }
+</script>
+
+</html>
