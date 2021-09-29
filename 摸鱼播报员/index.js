@@ -10,6 +10,13 @@ class CatchFish {
         this.now = new Date(); // 当前的日期
         this.solgan = '工作学习再累，一定不要忘记摸鱼哦！\n';
         this.tips = '有事没事起身去茶水间，去厕所，去廊道走走，别老在工位上坐着，钱是老板的，但命是自己\n';
+        // this.nationalHoliday = new Date('2021-10-01');
+        // this.newYearHoliday = new Date('2022-01-01');
+        // this.springFestival = new Date('2022-01-31');
+        // this.chingMingFestival = new Date('2022-04-05');
+        // this.workingHoliday = new Date('2022-05-01');
+        // this.dragonBoatFestival = new Date('2022-06-03');
+        // this.middleAutumFestival = new Date('2022-09-10');
         this.oneDay = 86400000; // 一天的时间
     }
 
@@ -25,6 +32,7 @@ class CatchFish {
      * 获取日期之间的差距
      * @param now
      * @param target
+     * @returns {number}
      */
     getDateGap(now, target) {
         // 一天等于多少 86400000 毫秒
@@ -38,9 +46,10 @@ class CatchFish {
 
 
     /**
-     * 获取间隔信息
-     * @param {string} festival
-     * @param {number} day
+     * 获取 节日间隔消息
+     * @param festival
+     * @param day
+     * @returns {string}
      */
     getGapMsg(festival, day) {
         return `距离${festival}假期还有${day}天\n`
@@ -48,6 +57,9 @@ class CatchFish {
 
     /**
      * 判断假期是否已经过了 o(╥﹏╥)o
+     * @param now
+     * @param target
+     * @returns {boolean}
      */
     isGoneAway(now, target) {
         return target.getTime() <= now.getTime()
@@ -55,6 +67,8 @@ class CatchFish {
 
     /**
      * 获取 万年历数据
+     * @param date
+     * @param result
      */
     requestData(date, result) {
         http.get(this.requestUrl + `?year=${date}&key=${this.key}`,  (res) => {
