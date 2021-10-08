@@ -18,6 +18,7 @@ class CatchFish {
         // this.dragonBoatFestival = new Date('2022-06-03');
         // this.middleAutumFestival = new Date('2022-09-10');
         this.oneDay = 86400000; // 一天的时间
+        this.resultData = ''; // 最后返回的结果
     }
 
     /**
@@ -37,11 +38,7 @@ class CatchFish {
     getDateGap(now, target) {
         // 一天等于多少 86400000 毫秒
         // 返回的是 日期数字
-        if (target.getTime() > now.getTime()) {
-            return Math.ceil((target.getTime() - now.getTime()) / this.oneDay)
-        } else {
-            return Math.ceil((now.getTime() - target.getTime()) / this.oneDay)
-        }
+        return target.getTime() > now.getTime() ? Math.ceil((target.getTime() - now.getTime()) / this.oneDay) : Math.ceil((now.getTime() - target.getTime()) / this.oneDay)
     }
 
 
@@ -76,20 +73,23 @@ class CatchFish {
                 console.log(`Got response: ${res.statusCode}`);
 
                 res.on('data', (chunk) => {
-                    const { data } = JSON.parse(chunk).result;
-                    const { holiday_list } = data;
-
-                    // 拼接打印最后的结果
-                    for (let holiday of holiday_list) {
-                        if (this.isGoneAway(this.now, new Date(holiday.startday))) {
-                            continue
-                        } else {
-                            // 判断当前时间是否为 假期以后，如果是则 跳过
-                            result += this.getGapMsg(holiday.name, this.getDateGap(this.now, new Date(holiday.startday)))
+                    const { result } = JSON.parse(chunk);
+                    console.log(result)
+                    if (result) {
+                        const { data } = JSON.parse(chunk).result;
+                        const { holiday_list } = data;
+                        let str = '';
+                        // 拼接打印最后的结果
+                        for (let holiday of holiday_list) {
+                            if (!this.isGoneAway(this.now, new Date(holiday.startday))) {
+                                // 判断当前时间是否为 假期以后，如果是则 跳过
+                                str += this.getGapMsg(holiday.name, this.getDateGap(this.now, new Date(holiday.startday)))
+                            }
                         }
-                    }
 
-                    console.log(result); // 最后结果 打印到控制台
+                        this.resultData = str;
+                        console.log(this.resultData); // 最后结果 打印到控制台
+                    }
                 });
             } else {
                 console.log('请求发生错误')
@@ -105,7 +105,7 @@ class CatchFish {
         let result = this.getCurrentDay() + this.solgan + this.tips;
         // 判断当前是在哪个位置，判断当前的时间如果超过则显示 0 天
 
-        this.requestData(new Date().getFullYear(), result);
+        this.requestData(2021, result);
 
     }
 }
