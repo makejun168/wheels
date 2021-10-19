@@ -17,6 +17,10 @@
 * [x] 状态机匹配字符串
 * [x] 摸鱼播报员
 * [ ] Mongodb 数据库CRUD
-* 
+* [ ] Vue cli 工具
+* [ ] lerna 多项目管理
+* [ ] qiankun 微前端实践
+* [ ] canvas 封装实现图表
+
 
 
