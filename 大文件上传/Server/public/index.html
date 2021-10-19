@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+
+</head>
+<body>
+    <input type="file" id="btnFile">
+    <input type="button" value="上传" onclick="upload(0)">
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+
+        let chunkSize = 1024 * 1024;
+        let btnFile = document.querySelector('#btnFile')
+
+        function upload(index) {
+            let file = btnFile.files[0]; // 获取到文件
+            let [fname, fext] = file.name.split('.')
+
+            let start = index * chunkSize
+
+            if (start > file.size) {
+                merge(file.name);
+                return;
+            }
+
+
+            let blod = file.slice(start, start + chunkSize);
+            let blodName = `${fname}.${index}.${fext}`;
+            let blodFile = new File([blod], blodName); // 区块文件
+
+            const formData = new FormData();
+            formData.append('file', blodFile);
+
+            axios.post('/upload', formData).then(res => {
+                console.log(res);
+                upload(++index); // 这一个区块上传成功以后 上传下一个区块
+            })
+        }
+
+        // 合并
+        function merge(name) {
+            axios.post('/merge', {name: name}).then(res => {
+                console.log(res);
+            })
+        }
+
+    </script>
+</body>
+</html>
