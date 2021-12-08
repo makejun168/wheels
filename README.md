@@ -7,6 +7,7 @@
 
 ### 任务列表
 
+* [x] Vue2 ObjectReactive Vue3 Proxy 双向数据绑定
 * [x] 瀑布流
 * [x] 无限滚动
 * [ ] 井字过三关
@@ -21,6 +22,10 @@
 * [ ] canvas 封装实现图表
 * [ ] Vue Plugins Vue 插件封装到发布
 * [ ] 浏览器性能监控
+* [x] 深拷贝
+* [x] 实现对象的可遍历
+* [x] 手写 useState
+* [x] 手写 useEffect
 
 
 
