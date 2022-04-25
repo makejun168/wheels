@@ -1,4 +1,5 @@
-// import { useState } React from 'react';
+// @ts-ignore
+import { useState } React from 'react';
 // import ReactDom from 'react-dom';
 
 // 真正实现是通过单向链表来 实现 useState 的
@@ -19,7 +20,7 @@ function Counter() {
     )
 }
 
-const allDeps: Array<any[] | undefined> = [];
+const allDeps: Array<any[] | undefined> = [];2
 let effectCursor: number = 0;
 
 function useEffect(callback: () => void, depArray?: any[]) {
