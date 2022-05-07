@@ -4,20 +4,9 @@ import './App.css';
 import useMousePosition from "./hooks/useMousePosition";
 import useURLLoader from "./hooks/useURLLoader";
 import Button, {ButtonSize, ButtonType} from "./components/Button/button";
+import Menu from "./components/Menu/menu";
+import MenuItem from "./components/Menu/menuItem";
 
-interface IShowResult {
-  message: string;
-  status: string;
-}
-
-// const DogShow: React.FC<{data: IShowResult}> = ({data}) => {
-//   return (
-//     <>
-//       <h2>Dog show: {data.status}</h2>
-//       <img src={data.message} />
-//     </>
-//   )
-// }
 
 const App: React.FC = () => {
   // const position = useMousePosition();
@@ -31,21 +20,17 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        {/*{*/}
-        {/*  !loading ? (*/}
-        {/*    <>*/}
-        {/*      <p>{dogResult.status}</p>*/}
-        {/*      <img src={dogResult.message} alt=""/>*/}
-        {/*    </>*/}
-        {/*  ) : 'loading'*/}
-        {/*}*/}
-        {/*<p>X: {position.x}, Y: {position.y}</p>*/}
-        {/*<LikeButton/>*/}
-        {/*{*/}
-        {/*  show && (<MouseTracker/>)*/}
-        {/*}*/}
-      </header>
+      <Menu defaultIndex={0} onSelect={(value) => alert(value)}>
+        <MenuItem index={0}>
+          cool link
+        </MenuItem>
+        <MenuItem index={1} disabled={true}>
+          cool link 2
+        </MenuItem>
+        <MenuItem index={2}>
+          cool link 3
+        </MenuItem>
+      </Menu>
       <Button className={'custom'} onClick={(e) => handleClick(e)} size={ButtonSize.Small} btnType={ButtonType.Primary}>点击</Button>
       <Button btnType={ButtonType.Danger}>点击</Button>
       <Button>点击</Button>
