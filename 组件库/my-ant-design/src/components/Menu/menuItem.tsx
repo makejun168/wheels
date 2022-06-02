@@ -4,11 +4,11 @@ import { MenuContext } from "./menu";
 
 
 export interface MenuItemProps {
-  index: number;
+  index?: number;
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
-
+  children?: any;
 }
 
 const MenuItem: React.FC<MenuItemProps> = (props) => {

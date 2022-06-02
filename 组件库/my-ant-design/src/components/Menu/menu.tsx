@@ -2,7 +2,7 @@ import React, { useState, createContext } from 'react';
 import classNames from 'classnames';
 
 type MenuMode = 'horizontal' | 'vertical';
-type SelectCallback = (selectIndex: number) => void;
+type SelectCallback = (selectIndex?: number) => void;
 
 export interface MenuProps {
   defaultIndex?: number;
@@ -14,7 +14,7 @@ export interface MenuProps {
 
 interface IMenuContext {
   index: number;
-  onSelect?: SelectCallback;
+  onSelect?: (index?: number) => void;
 }
 
 export const MenuContext = createContext<IMenuContext>({index: 0});
@@ -27,9 +27,9 @@ const Menu: React.FC<MenuProps> = (props) => {
     'menu-vertical': mode === 'vertical'
   })
 
-  const handleClick = (index: number) => {
+  const handleClick = (index?: number) => {
     setActive(index);
-    if (onSelect) {
+    if (onSelect && index) {
       onSelect(index);
     }
   }
