@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">上传文件</button>
+
+    <script>
+        function uploadFile() {
+            // 获取用户选择的文件输入元素
+            const fileInput = document.getElementById('fileInput');
+            // 获取用户选择的第一个文件（如果有选择的话）
+            const file = fileInput.files[0];
+
+            if (file) {
+                // 将文件内容读取为Blob对象
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const blob = new Blob([e.target.result], { type: file.type });
+
+                    // 创建XMLHttpRequest对象用于发送请求
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'your_upload_server_url.php', true);
+                    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+                    // 当请求完成时的回调函数
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            console.log('文件上传成功');
+                        } else {
+                            console.log('文件上传失败，状态码：', xhr.status);
+                        }
+                    };
+
+                    // 发送Blob对象到服务器
+                    xhr.send(blob);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                console.log('请先选择要上传的文件');
+            }
+        }
+    </script>
+</body>
+
+</html>

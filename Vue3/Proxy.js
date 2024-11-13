@@ -31,6 +31,7 @@ const proxy = new Proxy(target, handler)
 // get
 console.log(proxy.name, proxy.age);
 
+
 // set
 proxy.age = '19'
 

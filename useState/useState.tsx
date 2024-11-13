@@ -17,7 +17,7 @@ function Counter() {
             <button onclick={onClick}>点击</button>
         </div>
     )
-}
+}  
 
 let stateArray: any[] = [];
 let cursor = 0;
