@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <script>
+        // 创建一个Blob对象，这里假设是一个文件内容
+        const blob = new Blob(['这是一个模拟的文件内容'], { type: 'text/plain' });
+        const stream = blob.stream();
+        const reader = stream.getReader();
+        const body = new ReadableStream({
+            async pull(controller) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    controller.close();
+                } else {
+                    controller.enqueue(value);
+                }
+            }
+        });
+        const request = new Request('https://example.com/upload', {
+            method: 'POST',
+            body: body,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+        // 这里只是模拟fetch操作，没有真正发送网络请求
+        // 实际应用中可以使用真正的fetch API发送请求
+        const responsePromise = new Promise((resolve, reject) => {
+            // 模拟处理响应
+            resolve({ ok: true });
+        });
+        responsePromise.then((response) => {
+            if (response.ok) {
+                console.log('数据发送成功');
+            } else {
+                console.log('数据发送失败');
+            }
+        });
+    </script>
+</body>
+
+</html>

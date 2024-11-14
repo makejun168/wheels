@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <script>
+        // 示例数据，这里创建一个简单的文本 Blob 对象
+        const blob = new Blob(['这是一段示例文本'], { type: 'text/plain' });
+
+        // 将 Blob 对象转换为 Base64 编码的字符串
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            const base64String = reader.result;
+            // 将 Base64 编码的字符串存储到 localStorage
+            localStorage.setItem('myBlobData', base64String);
+
+            // 从 localStorage 中取出 Base64 编码的字符串并转换回 Blob 对象
+            const retrievedBase64String = localStorage.getItem('myBlobData');
+            const retrievedBlob = new Blob([window.atob(retrievedBase64String)], { type: 'text/plain' });
+
+            // 验证转换是否成功，这里简单输出 Blob 对象的内容
+            const reader2 = new FileReader();
+            reader2.onloadend = function () {
+                console.log(reader2.result);
+            };
+            reader2.readAsText(retrievedBlob);
+        };
+        reader.readAsDataURL(blob);
+    </script>
+</body>
+
+</html>
