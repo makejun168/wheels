@@ -1,0 +1,10 @@
+<script>
+// 模拟从网络接收到的二进制数据（这里用固定字节数组示例）
+const receivedData = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
+const arrayBuffer = receivedData.buffer;
+// 假设按照每2个字节一组解析为整数（只是简单示例，实际网络数据有复杂格式）
+const int16View = new Int16Array(arrayBuffer);
+for (let i = 0; i < int16View.length; i++) {
+    console.log('解析出的整数:', int16View[i]);
+}
+</script>

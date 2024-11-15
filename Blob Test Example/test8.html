@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <canvas id="myCanvas" width="300" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const gl = canvas.getContext('webgl');
+        if (gl) {
+            // 顶点坐标数据，这里是一个简单三角形的坐标
+            const vertices = new Float32Array([
+                0.0, 0.5, 0.0,
+                -0.5, -0.5, 0.0,
+                0.5, -0.5, 0.0
+            ]);
+            const vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices.buffer, gl.STATIC_DRAW);
+
+            const vertexAttribLocation = gl.getAttribLocation(gl.createProgram(), 'a_position');
+            gl.vertexAttribPointer(vertexAttribLocation, 3, gl.FLOAT, false, 0, 0);
+            gl.enableVertexAttribArray(vertexAttribLocation);
+
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+    </script>
+</body>
+
+</html>

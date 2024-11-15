@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <input type="file" id="imageFileInput" />
+    <button onclick="readImageFile()">读取图像文件</button>
+    <script>
+        function readImageFile() {
+            const fileInput = document.getElementById('imageFileInput');
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const arrayBuffer = e.target.result;
+                    // 假设简单查看前几个字节（不同图像格式开头有特定标识字节）
+                    const uint8View = new Uint8Array(arrayBuffer);
+                    console.log('图像文件开头部分字节:', uint8View.subarray(0, 10));
+                    // 如果是PNG图像，其文件头通常是固定的字节序列，可以做简单判断
+                    const pngHeader = [137, 80, 78, 71, 13, 10, 26, 10];
+                    let isPng = true;
+                    for (let i = 0; i < pngHeader.length; i++) {
+                        if (uint8View[i]!== pngHeader[i]) {
+                            isPng = false;
+                            break;
+                        }
+                    }
+                    if (isPng) {
+                        console.log('该图像可能是PNG格式');
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    </script>
+</body>
+
+</html>

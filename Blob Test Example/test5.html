@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <input type="file" id="fileInput" />
+    <button onclick="readFile()">读取文件</button>
+    <script>
+        function readFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const arrayBuffer = e.target.result;
+                    // 创建Uint8Array视图来查看文件字节数据
+                    const uint8View = new Uint8Array(arrayBuffer);
+                    console.log(uint8View);
+                    // 例如，可以统计文件字节长度
+                    console.log('文件字节长度:', uint8View.byteLength);
+                    // 或者查找特定字节值出现的次数（以下以查找字节值为0的次数为例）
+                    let count = 0;
+                    for (let i = 0; i < uint8View.byteLength; i++) {
+                        if (uint8View[i] === 0) {
+                            count++;
+                        }
+                    }
+                    console.log('字节值为0的出现次数:', count);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    </script>
+</body>
+
+</html>
