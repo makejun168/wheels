@@ -75,7 +75,7 @@ async function init() {
       name: 'useVuex',
       message: 'Set up Vuex for state management?',
     },
-    { 
+    {
       type: 'list',
       name: 'packageManager',
       message: 'Which package manager would you like to use?',
