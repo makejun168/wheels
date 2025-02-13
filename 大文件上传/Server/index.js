@@ -21,41 +21,51 @@ app.post('/upload', function (req, res) {
     form.parse(req);
 
     form.on('file', async (name, chunk) => {
-        // 存放切片目录
-        let chunkDir = `${UPLOAD_DIR}/${chunk.originalFilename.split('.')[0]}`;
+        try {
+            // 存放切片目录
+            let chunkDir = `${UPLOAD_DIR}/${chunk.originalFilename.split('.')[0]}`;
 
-        if (!fse.pathExistsSync(chunkDir)) {
-            await fse.mkdirs(chunkDir);
+            if (!fse.pathExistsSync(chunkDir)) {
+                await fse.mkdirs(chunkDir);
+            }
+
+            // 原文件名称.index.ext
+            const dPath = path.join(chunkDir, chunk.originalFilename.split('.')[1]);
+
+            await fse.move(chunk.path, dPath, {overwrite: true});
+
+            res.send('文件上传成功');
+        } catch (error) {
+            console.error('文件上传出错:', error);
+            res.status(500).send('文件上传失败');
         }
-
-        // 原文件名称.index.ext
-        const dPath = path.join(chunkDir, chunk.originalFilename.split('.')[1]);
-
-        await fse.move(chunk.path, dPath, {overwrite: true});
-
-        res.send('文件上传成功');
     })
+
+    form.on('error', (err) => {
+        console.error('表单解析出错:', err);
+        res.status(500).send('表单解析失败');
+    });
 })
 
 // 上传以后合并 merge
 app.post('/merge', async function (req, res) {
-    let name = req.body.name;
-    let fname = name.split('.')[0];
-
-    let chunkDir = path.join(UPLOAD_DIR, fname);
-    let chunks = await fse.readdir(chunkDir);
-
-    // 分片排序 然后进行 append
-    chunks.sort((a,b) => a-b).map(chunkPath => {
-        fs.appendFileSync(
-            path.join(UPLOAD_DIR, name),
-            fs.readFileSync(`${chunkDir}/${chunkPath}`)
-        )
-        // 保存文件
-    })
-
-    fse.remove(chunkDir); // 删除分片
-    res.send({msg: 'Success', url: `http://localhost:3000/upload/${name}`}); // 返回地址
+    try {
+        let name = req.body.name;
+        let fname = name.split('.')[0];
+        let chunkDir = path.join(UPLOAD_DIR, fname);
+        let chunks = await fse.readdir(chunkDir);
+        chunks.sort((a, b) => a - b).forEach(chunkPath => {
+            fs.appendFileSync(
+                path.join(UPLOAD_DIR, name),
+                fs.readFileSync(`${chunkDir}/${chunkPath}`)
+            );
+        });
+        await fse.remove(chunkDir); // 删除分片
+        res.send({ msg: 'Success', url: `http://localhost:3000/upload/${name}` });
+    } catch (error) {
+        console.error('文件合并出错:', error);
+        res.status(500).send('文件合并失败');
+    }
 })
 
 app.listen(3000)
