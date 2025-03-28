@@ -16,3 +16,19 @@
 
 empty -> start typing -> press submit -> submitting -> success/fail
 
+## state 构建原则
+
+1. 合并关联 state
+
+```js
+const [x, setX] = useState(0)
+const [y, setY] = useState(0)
+
+const [position, setPosition] = useState({x: 0, y: 0}); // 定义变量更加语意化
+```
+
+2. 避免互相矛盾的 state
+
+```js
+
+```
