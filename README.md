@@ -21,7 +21,7 @@
 * [ ] qiankun 微前端实践
 * [ ] canvas 封装实现图表
 * [ ] Vue Plugins Vue 插件封装到发布
-* [ ] 浏览器性能监控
+* [x] 浏览器性能监控
 * [x] 深拷贝
 * [x] 实现对象的可遍历
 * [x] 手写 useState
