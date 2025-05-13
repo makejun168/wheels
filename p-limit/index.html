@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas</title>
+</head>
+<body>
+  
+</body>
+<script>
+  // 绘制流程图
+function drawFlowChart() {
+  // 创建canvas元素
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.cloneNode(true).getContext('2d');
+
+  // 设置canvas大小
+  canvas.width = 800;
+  canvas.height = 600;
+
+  // 绘制标题
+  ctx.font = '20px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('pLimit 并发控制流程图', 400, 30);
+
+  // 绘制开始节点（椭圆）
+  ctx.beginPath();
+  ctx.arc(400, 80, 30, 0, 2 * Math.PI);
+  ctx.fillStyle = '#ffd6cc';
+  ctx.strokeStyle = '#ff7352';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('开始', 400, 85);
+
+  // 绘制创建并发控制器（矩形）
+  ctx.beginPath();
+  ctx.rect(250, 130, 300, 60);
+  ctx.fillStyle = '#e5f6ff';
+  ctx.strokeStyle = '#73a6ff';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('创建并发控制器', 400, 150);
+  ctx.fillText('初始化队列和活跃计数', 400, 170);
+
+  // 绘制添加任务（矩形）
+  ctx.beginPath();
+  ctx.rect(250, 220, 300, 60);
+  ctx.fillStyle = '#e5f6ff';
+  ctx.strokeStyle = '#73a6ff';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('添加任务到队列', 400, 240);
+  ctx.fillText('任务进入等待状态', 400, 260);
+
+  // 绘制检查并发限制（菱形）
+  ctx.beginPath();
+  ctx.moveTo(340, 320);
+  ctx.lineTo(400, 280);
+  ctx.lineTo(460, 320);
+  ctx.lineTo(400, 360);
+  ctx.closePath();
+  ctx.fillStyle = '#fff6cc';
+  ctx.strokeStyle = '#ffbc52';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('活跃任务数 < 并发限制?', 400, 320);
+
+  // 绘制执行任务（矩形）
+  ctx.beginPath();
+  ctx.rect(250, 420, 300, 60);
+  ctx.fillStyle = '#e5f6ff';
+  ctx.strokeStyle = '#73a6ff';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('从队列取出任务并执行', 400, 440);
+  ctx.fillText('增加活跃任务计数', 400, 460);
+
+  // 绘制任务等待（矩形）
+  ctx.beginPath();
+  ctx.rect(250, 520, 300, 60);
+  ctx.fillStyle = '#e5f6ff';
+  ctx.strokeStyle = '#73a6ff';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('任务留在队列中等待', 400, 540);
+  ctx.fillText('等待其他任务完成', 400, 560);
+
+  // 绘制任务完成（矩形）
+  ctx.beginPath();
+  ctx.rect(550, 420, 200, 60);
+  ctx.fillStyle = '#e5f6ff';
+  ctx.strokeStyle = '#73a6ff';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('任务完成', 650, 440);
+  ctx.fillText('减少活跃任务计数', 650, 460);
+
+  // 绘制检查队列（菱形）
+  ctx.beginPath();
+  ctx.moveTo(550, 320);
+  ctx.lineTo(610, 280);
+  ctx.lineTo(750, 320);
+  ctx.lineTo(610, 360);
+  ctx.closePath();
+  ctx.fillStyle = '#fff6cc';
+  ctx.strokeStyle = '#ffbc52';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('队列中有等待任务?', 550, 320);
+
+  // 绘制箭头
+  drawArrow(ctx, 400, 110, 400, 130);
+  drawArrow(ctx, 400, 190, 400, 220);
+  drawArrow(ctx, 400, 280, 400, 320);
+  drawArrow(ctx, 340, 360, 340, 420);
+  drawArrow(ctx, 460, 360, 460, 520);
+  drawArrow(ctx, 400, 480, 400, 520);
+  drawArrow(ctx, 400, 580, 400, 600);
+  drawArrow(ctx, 550, 360, 550, 420);
+  drawArrow(ctx, 550, 280, 550, 320);
+  drawArrow(ctx, 610, 320, 750, 320);
+  drawArrow(ctx, 750, 320, 750, 130);
+  drawArrow(ctx, 750, 130, 400, 130);
+
+  // 绘制标签
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('是', 340, 340);
+  ctx.fillText('否', 460, 340);
+  ctx.fillText('是', 550, 340);
+  ctx.fillText('否', 690, 340);
+
+  // 将canvas内容转换为图片（png格式）
+  // const imgData = canvas.toDataURL('image/png');
+  // const img = new Image();
+  // img.src = imgData;
+  document.body.appendChild(canvas);
+}
+
+// 绘制箭头函数
+function drawArrow(ctx, x1, y1, x2, y2) {
+  const headLen = 10;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  const nx = dx / len;
+  const ny = dy / len;
+  const headX = x2 - headLen * nx;
+  const headY = y2 - headLen * ny;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(headX, headY);
+  ctx.moveTo(headX, headY);
+  ctx.lineTo(headX + 6 * ny, headY - 6 * nx);
+  ctx.moveTo(headX, headY);
+  ctx.lineTo(headX - 6 * ny, headY + 6 * nx);
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+// 调用绘制函数
+drawFlowChart();
+</script>
+</html>
