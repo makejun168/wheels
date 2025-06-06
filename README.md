@@ -18,7 +18,7 @@
 * [ ] Mongodb 数据库CRUD
 * [ ] Vue cli 工具
 * [ ] lerna 多项目管理
-* [ ] qiankun 微前端实践
+* [x] qiankun 微前端实践
 * [x] canvas 封装实现图表
 * [ ] Vue Plugins Vue 插件封装到发布
 * [x] 浏览器性能监控
