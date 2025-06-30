@@ -133,3 +133,99 @@ qiankun-demo/
 ## License
 
 MIT
+
+## 使用 Qiankun 的微前端应用实例
+
+### 应用场景
+
+假设你有一个大型企业门户网站，需要集成多个业务系统（如用户管理、订单管理、报表分析等），这些系统由不同团队独立开发、部署和维护。传统的单体前端架构难以满足团队协作和独立发布的需求，此时微前端架构可以很好地解决这些问题。
+
+### 实例说明
+
+#### 1. 主应用（Portal）
+
+主应用负责整体布局、导航栏、统一认证和子应用的加载。它通过 `qiankun` 注册和管理多个子应用。
+
+**主应用核心代码：**
+
+```javascript
+import { registerMicroApps, start } from 'qiankun';
+
+registerMicroApps([
+  {
+    name: 'user-app',
+    entry: '//localhost:7101',
+    container: '#subapp-viewport',
+    activeRule: '/user',
+  },
+  {
+    name: 'order-app',
+    entry: '//localhost:7102',
+    container: '#subapp-viewport',
+    activeRule: '/order',
+  },
+]);
+
+start();
+```
+
+**主应用 HTML：**
+
+```html
+<div id="navbar">
+  <a href="/user">用户管理</a>
+  <a href="/order">订单管理</a>
+</div>
+<div id="subapp-viewport"></div>
+```
+
+#### 2. 子应用（如用户管理）
+
+每个子应用是一个独立的前端项目，可以使用不同的技术栈（如 React、Vue、Angular），只需暴露生命周期函数（bootstrap、mount、unmount）即可被主应用加载。
+
+**子应用导出生命周期：**
+
+```javascript
+export async function bootstrap() {
+  // 初始化逻辑
+}
+export async function mount(props) {
+  // 渲染子应用
+}
+export async function unmount() {
+  // 卸载子应用
+}
+```
+
+#### 3. 通信机制
+
+主应用和子应用之间可以通过 qiankun 的全局状态管理或自定义事件进行通信。例如，主应用可以向子应用传递用户信息，子应用可以通知主应用某些操作完成。
+
+**示例：**
+
+```javascript
+import { initGlobalState } from 'qiankun';
+
+const actions = initGlobalState({ user: 'admin' });
+
+actions.onGlobalStateChange((state, prev) => {
+  // 监听全局状态变化
+});
+```
+
+### 原理解析
+
+- **沙箱隔离**：qiankun 利用 JS 沙箱和样式隔离机制，保证各子应用之间互不影响。
+- **路由劫持**：主应用通过监听路由变化，决定何时加载/卸载对应的子应用。
+- **生命周期管理**：每个子应用需实现 bootstrap、mount、unmount 等生命周期函数，主应用根据路由动态调用这些函数，实现子应用的动态挂载与卸载。
+- **独立部署**：每个子应用可独立开发、测试和部署，主应用只需配置入口地址即可集成。
+
+### 适用场景
+
+- 多团队协作开发大型前端项目
+- 需要渐进式重构老系统
+- 不同业务线需要独立发布和部署
+- 希望复用已有项目或技术栈
+
+通过 qiankun 实现微前端，可以极大提升前端项目的可维护性、可扩展性和团队协作效率。
+
