@@ -46,7 +46,7 @@ let formInitialState = {};
 function saveInitialFormState() {
   const form = document.getElementById('myForm');
   const inputs = form.querySelectorAll('input, select, textarea');
-  inputs.forEach(input => {
+  inputs.forEach(input => { 
     // 记录每个字段的初始值（根据类型处理）
     if (input.type === 'checkbox' || input.type === 'radio') {
       formInitialState[input.name] = input.checked;

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>场景步骤信息展示</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+        h2 { margin-top: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; background: #fff; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background: #eee; }
+        .scene-title { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>📋 MeterSphere 场景步骤展示</h1>
+<input type="file" id="fileInput" accept="application/json">
+<div id="container"></div>
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                renderData(data);
+            } catch (err) {
+                document.getElementById('container').textContent = '❌ 解析 JSON 文件失败';
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    function renderData(data) {
+        const container = document.getElementById('container');
+        container.innerHTML = '';
+
+        Object.entries(data).forEach(([projectName, scenes]) => {
+            const projectTitle = document.createElement('h2');
+            projectTitle.textContent = `项目：${projectName}`;
+            container.appendChild(projectTitle);
+
+            scenes.forEach(scene => {
+                const sceneTitle = document.createElement('div');
+                sceneTitle.className = 'scene-title';
+                sceneTitle.textContent = `场景：${scene.sceneName}`;
+                container.appendChild(sceneTitle);
+
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                thead.innerHTML = `
+            <tr>
+              <th>步骤序号</th>
+              <th>步骤描述</th>
+              <th>断言验证</th>
+            </tr>`;
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                scene.steps.forEach(step => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+              <td>${step.stepIndex}</td>
+              <td>${step.name}</td>
+              <td>${step.assertions?.join('<br>') || ''}</td>`;
+                    tbody.appendChild(tr);
+                });
+                table.appendChild(tbody);
+                container.appendChild(table);
+            });
+        });
+    }
+</script>
+</body>
+</html>
