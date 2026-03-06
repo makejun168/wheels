@@ -1,0 +1,97 @@
+{
+  "api_keys": {
+    "tushare": "your_tushare_token_here",
+    "alpha_vantage": "your_alpha_vantage_key_here",
+    "quandl": "your_quandl_api_key_here",
+    "eastmoney": null,
+    "sina": null
+  },
+  "symbols": {
+    "港股": [
+      "00700.HK",
+      "09988.HK",
+      "01810.HK",
+      "03690.HK",
+      "09618.HK",
+      "09888.HK",
+      "02020.HK",
+      "02382.HK",
+      "00941.HK",
+      "00883.HK"
+    ],
+    "A股": [
+      "000001.SZ",
+      "600000.SH",
+      "000002.SZ",
+      "600036.SH",
+      "000858.SZ"
+    ],
+    "美股": [
+      "AAPL",
+      "GOOGL",
+      "MSFT",
+      "AMZN",
+      "TSLA",
+      "META",
+      "NVDA"
+    ],
+    "指数": [
+      "^HSI",
+      "^HSTECH",
+      "^GSPC",
+      "^IXIC",
+      "^DJI",
+      "000001.SS",
+      "399001.SZ"
+    ]
+  },
+  "data_sources": {
+    "yfinance": {
+      "enabled": true,
+      "rate_limit": 2,
+      "description": "雅虎财经数据，免费，历史数据完整"
+    },
+    "tushare": {
+      "enabled": false,
+      "rate_limit": 1,
+      "description": "国内股票数据，需要注册token"
+    },
+    "akshare": {
+      "enabled": false,
+      "rate_limit": 1,
+      "description": "AkShare开源金融数据"
+    },
+    "sina": {
+      "enabled": true,
+      "rate_limit": 1,
+      "description": "新浪财经实时数据"
+    },
+    "eastmoney": {
+      "enabled": true,
+      "rate_limit": 1,
+      "description": "东方财富数据"
+    }
+  },
+  "fetch_settings": {
+    "default_period": "1y",
+    "default_interval": "1d",
+    "auto_fetch": false,
+    "auto_fetch_time": "16:30",
+    "data_retention_days": 365,
+    "backup_enabled": true,
+    "backup_location": "../backups"
+  },
+  "notification": {
+    "email_enabled": false,
+    "email_address": "your_email@example.com",
+    "telegram_enabled": false,
+    "telegram_bot_token": "your_bot_token",
+    "telegram_chat_id": "your_chat_id"
+  },
+  "analysis_settings": {
+    "technical_indicators": ["MA", "RSI", "MACD", "BB", "KDJ"],
+    "fundamental_metrics": ["PE", "PB", "PS", "ROE", "ROA", "DebtRatio"],
+    "default_currency": "CNY",
+    "timezone": "Asia/Shanghai"
+  }
+}

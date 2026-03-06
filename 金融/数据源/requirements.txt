@@ -1,0 +1,44 @@
+# 金融数据获取所需的Python库
+# 安装命令: pip install -r requirements.txt
+
+# 核心数据获取库
+yfinance>=0.2.33          # 雅虎财经数据
+pandas>=2.0.0             # 数据处理
+numpy>=1.24.0             # 数值计算
+
+# 国内数据源
+akshare>=1.11.75          # 免费金融数据 (可选)
+tushare>=1.2.89           # 国内股票数据 (需要token，可选)
+baostock>=0.8.80          # 免费A股数据 (可选)
+
+# 网络请求
+requests>=2.31.0          # HTTP请求
+beautifulsoup4>=4.12.0    # HTML解析 (用于网页爬取)
+lxml>=4.9.0               # XML/HTML解析器
+
+# 数据处理和可视化
+matplotlib>=3.7.0         # 绘图库
+seaborn>=0.12.0           # 统计可视化
+plotly>=5.17.0            # 交互式图表
+
+# 数据库
+sqlalchemy>=2.0.0         # SQL工具包
+pymongo>=4.5.0            # MongoDB驱动 (可选)
+redis>=5.0.0              # Redis缓存 (可选)
+
+# 任务调度
+APScheduler>=3.10.0       # 定时任务
+schedule>=1.2.0           # 简单定时任务 (可选)
+
+# 开发和工具
+jupyter>=1.0.0            # Jupyter Notebook
+ipython>=8.14.0           # 交互式Python
+black>=23.0.0             # 代码格式化
+flake8>=6.0.0             # 代码检查
+
+# 环境管理
+python-dotenv>=1.0.0      # 环境变量管理
+configparser>=5.3.0       # 配置文件解析
+
+# 版本要求
+python>=3.8
