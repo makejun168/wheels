@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进度仪表盘 - 每日工作进度管理系统</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-tasks"></i>
+                <h1>每日工作进度管理系统</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> 首页</a>
+                <a href="daily-form.html"><i class="fas fa-edit"></i> 填写今日工作</a>
+                <a href="dashboard.html" class="active"><i class="fas fa-chart-line"></i> 进度仪表盘</a>
+                <a href="#" id="refresh-btn"><i class="fas fa-sync-alt"></i> 刷新数据</a>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 项目选择器 -->
+            <div class="project-selector" style="margin-bottom: 2rem;">
+                <label for="project-select" class="form-label">
+                    <i class="fas fa-project-diagram"></i> 选择项目
+                </label>
+                <select id="project-select" class="form-control" style="max-width: 300px;">
+                    <option value="">加载中...</option>
+                </select>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <h4><i class="fas fa-chart-pie"></i> 整体进度</h4>
+                    <div class="stat-value" id="overall-progress">--%</div>
+                    <div class="stat-change" id="progress-change">--</div>
+                </div>
+
+                <div class="stat-card">
+                    <h4><i class="fas fa-tasks"></i> 任务总数</h4>
+                    <div class="stat-value" id="total-tasks">--</div>
+                    <div class="stat-change">已完成: <span id="completed-tasks">--</span></div>
+                </div>
+
+                <div class="stat-card">
+                    <h4><i class="fas fa-clock"></i> 总工时</h4>
+                    <div class="stat-value" id="total-hours">--</div>
+                    <div class="stat-change">日均: <span id="avg-daily-hours">--</span></div>
+                </div>
+
+                <div class="stat-card">
+                    <h4><i class="fas fa-calendar-alt"></i> 项目周期</h4>
+                    <div class="stat-value" id="project-duration">-- 天</div>
+                    <div class="stat-change">剩余: <span id="days-remaining">-- 天</span></div>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="charts-container">
+                <!-- 进度趋势图 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-line-chart"></i> 进度趋势</h3>
+                        <div class="chart-controls">
+                            <select id="trend-period" class="form-control" style="width: 150px;">
+                                <option value="7">最近7天</option>
+                                <option value="14">最近14天</option>
+                                <option value="30" selected>最近30天</option>
+                                <option value="90">最近90天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="progress-trend-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 任务分布图 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-pie"></i> 任务状态分布</h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="task-distribution-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 工作量分布图 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-bar"></i> 工作量分布</h3>
+                        <div class="chart-controls">
+                            <select id="workload-period" class="form-control" style="width: 150px;">
+                                <option value="7">最近7天</option>
+                                <option value="14" selected>最近14天</option>
+                                <option value="30">最近30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="workload-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 燃尽图 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-fire"></i> 燃尽图</h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="burn-down-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 任务列表 -->
+            <div class="table-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-list-ul"></i> 任务列表</h3>
+                    <div class="chart-controls">
+                        <select id="task-filter" class="form-control" style="width: 150px;">
+                            <option value="all">所有任务</option>
+                            <option value="pending">待开始</option>
+                            <option value="in_progress">进行中</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tasks-table">
+                        <thead>
+                            <tr>
+                                <th>任务名称</th>
+                                <th>负责人</th>
+                                <th>优先级</th>
+                                <th>状态</th>
+                                <th>进度</th>
+                                <th>预估工时</th>
+                                <th>实际工时</th>
+                                <th>截止日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-table-body">
+                            <tr>
+                                <td colspan="9" class="loading">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 详细进度报告 -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-file-alt"></i> 详细进度报告</h3>
+                    <button class="btn secondary" id="export-report-btn">
+                        <i class="fas fa-download"></i> 导出报告
+                    </button>
+                </div>
+                <div id="detailed-report">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>每日工作进度管理系统 &copy; 2026 | 版本 1.0.0</p>
+            <p class="footer-links">
+                <a href="#" id="api-status">API状态: 检查中...</a>
+                <span id="last-update">最后更新: --</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">提示</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <p>模态框内容</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-close-btn">关闭</button>
+                <button class="btn primary" id="modal-confirm-btn" style="display: none;">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填写今日工作 - 每日工作进度管理系统</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-tasks"></i>
+                <h1>每日工作进度管理系统</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> 首页</a>
+                <a href="daily-form.html" class="active"><i class="fas fa-edit"></i> 填写今日工作</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> 进度仪表盘</a>
+                <a href="#" id="refresh-btn"><i class="fas fa-sync-alt"></i> 刷新数据</a>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-calendar-day"></i> 填写今日工作内容</h2>
+                    <p id="today-date">今天是：加载中...</p>
+                    <p id="task-summary">待完成任务：加载中...</p>
+                </div>
+
+                <div id="form-alert" class="alert" style="display: none;"></div>
+
+                <div id="loading" class="loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 正在加载今日任务...</p>
+                </div>
+
+                <form id="daily-work-form" style="display: none;">
+                    <div id="task-forms-container">
+                        <!-- 任务表单将通过JavaScript动态生成 -->
+                    </div>
+
+                    <div class="form-group" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e9ecef;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-sticky-note"></i> 今日总结
+                                </label>
+                                <textarea
+                                    id="daily-summary"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="请简要总结今日整体工作情况和心得体会..."
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-exclamation-triangle"></i> 遇到的困难
+                                </label>
+                                <textarea
+                                    id="daily-issues"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="描述今天遇到的主要困难和挑战..."
+                                ></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-lightbulb"></i> 解决方案
+                                </label>
+                                <textarea
+                                    id="daily-solutions"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="描述如何解决这些困难..."
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-check"></i> 明日计划
+                            </label>
+                            <textarea
+                                id="tomorrow-plan"
+                                class="form-control"
+                                rows="2"
+                                placeholder="简要描述明天的计划安排..."
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                        <div class="form-stats">
+                            <p id="total-hours">总工时：<span>0.0</span> 小时</p>
+                            <p id="avg-progress">平均进度：<span>0.0</span>%</p>
+                        </div>
+
+                        <div class="form-buttons" style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn secondary" id="save-draft-btn">
+                                <i class="fas fa-save"></i> 保存草稿
+                            </button>
+                            <button type="submit" class="btn primary" id="submit-btn">
+                                <i class="fas fa-paper-plane"></i> 提交今日工作
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="no-tasks-message" style="display: none; text-align: center; padding: 3rem;">
+                    <i class="fas fa-clipboard-check fa-3x" style="color: #4361ee; margin-bottom: 1rem;"></i>
+                    <h3>今日暂无待办任务</h3>
+                    <p>所有任务已完成，或者今日的工作表格尚未生成。</p>
+                    <div style="margin-top: 2rem;">
+                        <button class="btn primary" id="generate-today-tasks-btn">
+                            <i class="fas fa-plus-circle"></i> 生成今日工作表格
+                        </button>
+                        <button class="btn secondary" onclick="window.location.href='index.html'">
+                            <i class="fas fa-home"></i> 返回首页
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>每日工作进度管理系统 &copy; 2026 | 版本 1.0.0</p>
+            <p class="footer-links">
+                <a href="#" id="api-status">API状态: 检查中...</a>
+                <span id="last-update">最后更新: --</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">提示</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <p>模态框内容</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-close-btn">关闭</button>
+                <button class="btn primary" id="modal-confirm-btn" style="display: none;">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/daily-form.js"></script>
+</body>
+</html>

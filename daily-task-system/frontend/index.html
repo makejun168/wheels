@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日工作进度管理系统</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-tasks"></i>
+                <h1>每日工作进度管理系统</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> 首页</a>
+                <a href="daily-form.html"><i class="fas fa-edit"></i> 填写今日工作</a>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> 进度仪表盘</a>
+                <a href="#" id="refresh-btn"><i class="fas fa-sync-alt"></i> 刷新数据</a>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="welcome-section">
+                <h2><i class="fas fa-calendar-day"></i> 欢迎使用每日工作进度管理系统</h2>
+                <p class="welcome-text">
+                    本系统帮助您跟踪每日工作内容，记录项目进度，并以可视化方式展示整体进展。
+                    系统每天自动生成工作表格，您只需填写完成情况，数据将自动同步到总表。
+                </p>
+            </div>
+
+            <div class="today-info">
+                <h3><i class="fas fa-calendar-check"></i> 今日概览</h3>
+                <div class="info-cards">
+                    <div class="info-card" id="today-date">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>今日日期</h4>
+                            <p class="card-value">加载中...</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card" id="pending-tasks">
+                        <div class="card-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>待完成任务</h4>
+                            <p class="card-value">加载中...</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card" id="completed-tasks">
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>已完成任务</h4>
+                            <p class="card-value">加载中...</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card" id="project-progress">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>项目进度</h4>
+                            <p class="card-value">加载中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> 快速操作</h3>
+                <div class="action-buttons">
+                    <a href="daily-form.html" class="action-btn primary">
+                        <i class="fas fa-edit"></i>
+                        <span>填写今日工作</span>
+                        <p>记录今天完成的工作内容</p>
+                    </a>
+
+                    <a href="dashboard.html" class="action-btn secondary">
+                        <i class="fas fa-chart-line"></i>
+                        <span>查看进度仪表盘</span>
+                        <p>可视化查看项目进展</p>
+                    </a>
+
+                    <button class="action-btn success" id="generate-today-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>生成今日表格</span>
+                        <p>手动生成今天的工作表格</p>
+                    </button>
+
+                    <button class="action-btn info" id="view-history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>查看历史记录</span>
+                        <p>浏览过去的工作记录</p>
+                    </button>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3><i class="fas fa-history"></i> 最近活动</h3>
+                <div class="activity-list" id="activity-list">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>每日工作进度管理系统 &copy; 2026 | 版本 1.0.0</p>
+            <p class="footer-links">
+                <a href="#" id="api-status">API状态: 检查中...</a>
+                <span id="last-update">最后更新: --</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">提示</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <p>模态框内容</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-close-btn">关闭</button>
+                <button class="btn primary" id="modal-confirm-btn" style="display: none;">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/index.js"></script>
+</body>
+</html>
